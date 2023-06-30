@@ -1,31 +1,27 @@
-const BASE_URL = 'http://localhost:3000/hw/store/';
+const { assert } = require("chai");
+const { LAYOUTS, PAGES_URLS } = require('../const');
 
-const PAGES = {
-    home: BASE_URL,
-    catalog: `${BASE_URL}/catalog`,
-    delivery: `${BASE_URL}/delivery`,
-    contacts: `${BASE_URL}/contacts`,
-    cart: `${BASE_URL}/cart`,
+async function checkAdaptive(browser, url, pageName, size) {
+  await browser.setWindowSize(LAYOUTS[size].width, LAYOUTS[size].height);
+  await browser.url(url);
+  await browser.assertView(pageName, '.Application', {
+    allowViewportOverflow: false,
+  });
 }
 
-const LAYOUTS = {
-    'large': {
-        width: 1920,
-        height: 1080,
-    },
-    'medium': {
-        width: 767,
-        height: 1080,
-    },
-    'small': {
-        width: 320,
-        height: 1080,
-    },
-}
-
-describe('Верстка должна адаптироваться под ширину экрана', async function() {
-    it('Страница Home адаптируется под ширину экрана', async function() {
-        await this.browser.url(PAGES.home);
-        await this.browser.assertView('homePage', '.Application');
+describe(
+  'В магазине должны быть страницы: главная, каталог, условия доставки, контакты. Верстка должна адаптироваться под ширину экрана',
+  function () {
+    it('Страница Home существует и адаптируется под ширину экрана', async function ({ browser }) {
+      await checkAdaptive(browser, PAGES_URLS.home, 'homePage', 'large');
+      await checkAdaptive(browser, PAGES_URLS.home, 'homePageMedium', 'medium');
+      await checkAdaptive(browser, PAGES_URLS.home, 'homePageSmall', 'small');
     });
-});
+
+    it('Страница Delivery существует и адаптируется под ширину экрана', async function ({ browser }) {
+      await checkAdaptive(browser, PAGES_URLS.delivery, 'deliveryPage', 'large');
+      await checkAdaptive(browser, PAGES_URLS.delivery, 'deliveryPageMedium', 'medium');
+      await checkAdaptive(browser, PAGES_URLS.delivery, 'deliveryPageSmall', 'small');
+    });
+  }
+);
