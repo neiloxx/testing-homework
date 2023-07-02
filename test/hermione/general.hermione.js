@@ -1,9 +1,15 @@
 const { assert } = require("chai");
 const { PAGES_URLS } = require('../const');
 
+let bug_id = '';
+
+if (process.env.BUG_ID) {
+  bug_id = process.env.BUG_ID;
+}
+
 describe('Общие требования', async function () {
   it('На ширине меньше 576px навигационное меню должно скрываться за "гамбургер', async function ({ browser }) {
-    browser.url(`${ PAGES_URLS.home }`);
+    browser.url(`${ PAGES_URLS.home }?bug_id=${bug_id}`);
     const menu = await browser.$('.Application-Menu');
     const toggle = await browser.$('.Application-Toggler');
 
@@ -18,7 +24,7 @@ describe('Общие требования', async function () {
 
   it('При выборе элемента из меню "гамбургера", меню должно закрываться', async ({ browser }) => {
     await browser.setWindowSize(575, 1000);
-    await browser.url(`${ PAGES_URLS.home }?bug_id=4`);
+    await browser.url(`${ PAGES_URLS.home }?bug_id=${bug_id}`);
 
     const menu = await browser.$('.Application-Menu');
     const toggle = await browser.$('.Application-Toggler');

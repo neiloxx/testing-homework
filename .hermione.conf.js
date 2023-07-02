@@ -11,6 +11,7 @@ module.exports = {
       desiredCapabilities: {
         browserName: "chrome",
       },
+      retry: 5,
       windowSize: {
         width: 1920,
         height: 1080,
